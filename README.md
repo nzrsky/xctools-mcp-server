@@ -4,14 +4,14 @@ A Model Context Protocol (MCP) server that provides structured access to Xcode d
 
 ## Installation
 
-### Method 1: Using uvx (Recommended for published package)
+### Method 1: Using uvx
 
 1. **Prerequisites**:
    - Python 3.13+
    - Xcode with Command Line Tools installed
    - [uvx](https://github.com/astral-sh/uv): `curl -LsSf https://astral.sh/uv/install.sh | sh`
 
-2. **Run directly with uvx** (when published to PyPI):
+2. **Run directly with uvx**:
    ```bash
    uvx xctools-mcp-server
    ```
@@ -60,7 +60,7 @@ Add to your `~/Library/Application Support/Claude/claude_desktop_config.json`:
 }
 ```
 
-Or if using uvx (when published):
+Or if using uvx:
 
 ```json
 {
@@ -91,7 +91,7 @@ Or if using uvx (when published):
 }
 ```
 
-Or if using uvx (when published):
+Or if using uvx:
 
 ```json
 {
@@ -117,7 +117,7 @@ The server runs on stdio, so you can invoke it directly:
 xctools-mcp-server
 ```
 
-**With uvx (when published):**
+**With uvx:**
 ```bash
 uvx xctools-mcp-server
 ```
