@@ -1,6 +1,6 @@
-# SimCtl MCP Server
+# XCTools MCP Server
 
-A Model Context Protocol (MCP) server that provides structured access to iOS Simulator management via `xcrun simctl` commands.
+A Model Context Protocol (MCP) server that provides structured access to Xcode development tools including `xcrun`, `xcodebuild`, and `xctrace`.
 
 ## Installation
 
@@ -13,7 +13,7 @@ A Model Context Protocol (MCP) server that provides structured access to iOS Sim
 
 2. **Run directly with uvx** (when published to PyPI):
    ```bash
-   uvx simctl-mcp-server
+   uvx xctools-mcp-server
    ```
 
 ### Method 2: Local Development Installation
@@ -24,14 +24,14 @@ A Model Context Protocol (MCP) server that provides structured access to iOS Sim
 
 2. **Clone and install**:
    ```bash
-   git clone https://github.com/nzrsky/simctl-mcp-server
-   cd simctl-mcp-server
+   git clone https://github.com/nzrsky/xctools-mcp-server
+   cd xctools-mcp-server
    pip install .
    ```
 
 3. **Run the server**:
    ```bash
-   simctl-mcp-server
+   xctools-mcp-server
    ```
 
 ### Method 3: Build from Source
@@ -39,7 +39,7 @@ A Model Context Protocol (MCP) server that provides structured access to iOS Sim
 1. **Build the wheel**:
    ```bash
    python -m build --wheel
-   pip install dist/simctl_mcp_server-0.1.0-py3-none-any.whl
+   pip install dist/xctools_mcp_server-0.1.0-py3-none-any.whl
    ```
 
 ## Configuration
@@ -51,8 +51,8 @@ Add to your `~/Library/Application Support/Claude/claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "simctl": {
-      "command": "simctl-mcp-server",
+    "xctools": {
+      "command": "xctools-mcp-server",
       "args": [],
       "env": {}
     }
@@ -65,9 +65,9 @@ Or if using uvx (when published):
 ```json
 {
   "mcpServers": {
-    "simctl": {
+    "xctools": {
       "command": "uvx",
-      "args": ["simctl-mcp-server"],
+      "args": ["xctools-mcp-server"],
       "env": {}
     }
   }
@@ -82,8 +82,8 @@ Or if using uvx (when published):
 ```json
 {
   "mcp.servers": {
-    "simctl": {
-      "command": "simctl-mcp-server",
+    "xctools": {
+      "command": "xctools-mcp-server",
       "args": [],
       "env": {}
     }
@@ -96,9 +96,9 @@ Or if using uvx (when published):
 ```json
 {
   "mcp.servers": {
-    "simctl": {
+    "xctools": {
       "command": "uvx",
-      "args": ["simctl-mcp-server"],
+      "args": ["xctools-mcp-server"],
       "env": {}
     }
   }
@@ -106,7 +106,7 @@ Or if using uvx (when published):
 ```
 
 3. **Restart VS Code** to load the MCP server
-4. **Use the Command Palette** (`Cmd+Shift+P`) and search for "MCP" commands to interact with the simulator tools
+4. **Use the Command Palette** (`Cmd+Shift+P`) and search for "MCP" commands to interact with the Xcode development tools
 
 ### For Other MCP Clients
 
@@ -114,93 +114,149 @@ The server runs on stdio, so you can invoke it directly:
 
 **With installed package:**
 ```bash
-simctl-mcp-server
+xctools-mcp-server
 ```
 
 **With uvx (when published):**
 ```bash
-uvx simctl-mcp-server
+uvx xctools-mcp-server
 ```
+
+## Features
+
+- **Complete Xcode toolchain access** through `xcrun`
+- **Project building and testing** with `xcodebuild`
+- **Performance analysis** using `xctrace` (Instruments)
+- **SDK and destination management**
+- **Comprehensive error handling** with detailed messages
+- **Cross-platform compatibility** (macOS with Xcode installed)
 
 ## Available Tools
 
-### Device Management
-- **`simctl_list_devices`** - List all simulators and their states
-- **`simctl_boot_device`** - Boot a simulator
-- **`simctl_shutdown_device`** - Shutdown a simulator
-- **`simctl_create_device`** - Create a new simulator
-- **`simctl_delete_device`** - Delete simulators
+### XCRUN Tools
+- **`xcrun_find_tool`** - Find the path to development tools (clang, swift, etc.)
+- **`xcrun_show_sdk_path`** - Show the path to SDKs
+- **`xcrun_show_sdk_version`** - Show SDK versions
+- **`xcrun_run_tool`** - Run any development tool via xcrun
 
-### App Management
-- **`simctl_install_app`** - Install an app (.app bundle or .ipa)
-- **`simctl_launch_app`** - Launch an app with options
-- **`simctl_terminate_app`** - Terminate a running app
+### XCODEBUILD Tools
+- **`xcodebuild_build`** - Build Xcode projects or workspaces
+- **`xcodebuild_test`** - Run tests for projects/workspaces
+- **`xcodebuild_archive`** - Archive projects for distribution
+- **`xcodebuild_list`** - List targets, schemes, and configurations
+- **`xcodebuild_show_sdks`** - List all available SDKs
+- **`xcodebuild_show_destinations`** - Show valid build destinations
 
-### Media & Screenshots
-- **`simctl_screenshot`** - Take screenshots
-- **`simctl_record_video`** - Record video (start recording)
-
-### Testing & Development
-- **`simctl_push_notification`** - Send push notifications
-- **`simctl_privacy_control`** - Manage app permissions
-- **`simctl_set_location`** - Set device location/GPS
-- **`simctl_status_bar_override`** - Override status bar appearance
-- **`simctl_ui_appearance`** - Control light/dark mode
+### XCTRACE Tools (Instruments)
+- **`xctrace_record`** - Record new Instruments traces
+- **`xctrace_import`** - Import supported files into trace format
+- **`xctrace_export`** - Export data from trace files
+- **`xctrace_list`** - List available devices, templates, or instruments
+- **`xctrace_symbolicate`** - Symbolicate traces with debug symbols
 
 ## Usage Examples
 
-### Basic Device Operations
+### Finding Development Tools
 
 ```
-# List all devices
-"List all available iOS simulators"
+# Find the path to a specific tool
+"Find the path to clang compiler"
 
-# Boot a specific device
-"Boot the iPhone 15 Pro simulator"
+# Show SDK path for iOS
+"Show the path to the iOS SDK"
 
-# Create a new simulator
-"Create a new iPhone 14 simulator named 'Test Device' with iOS 17.0"
+# Get SDK version information
+"Show the version of the iOS SDK"
 ```
 
-### App Testing
+### Building Projects
 
 ```
-# Install and launch an app
-"Install MyApp.app on the booted simulator and launch it"
+# Build an Xcode project
+"Build the project MyApp.xcodeproj for iOS simulator"
 
-# Take a screenshot
-"Take a screenshot of the current simulator and save it to ~/Desktop/screenshot.png"
+# Run tests for a workspace
+"Run tests for MyApp.xcworkspace on iPhone 15 Pro simulator"
 
-# Send a push notification
-"Send a push notification with title 'Hello' and body 'Test message' to com.example.myapp"
+# Archive for distribution
+"Archive MyApp.xcworkspace for release"
+
+# List project information
+"List all schemes and targets in MyApp.xcodeproj"
 ```
 
-### UI Testing Setup
+### Performance Analysis with Instruments
 
 ```
-# Set up a controlled testing environment
-"Set the simulator to dark mode, override the status bar to show full battery and strong WiFi, and set the time to 9:41 AM"
+# Record a trace for Time Profiler
+"Record a Time Profiler trace for MyApp on iPhone 15 Pro for 30 seconds"
 
-# Grant permissions for testing
-"Grant photo library access to com.example.myapp on the booted simulator"
+# List available instruments
+"List all available Instruments templates"
+
+# Export trace data
+"Export data from trace file to XML format"
+
+# Import a file for analysis
+"Import a .dtps file into Instruments trace format"
 ```
 
-### Location Testing
+### SDK and Destination Management
 
 ```
-# Set specific location
-"Set the simulator location to Apple Park (37.334606, -122.009102)"
+# List all available SDKs
+"Show all available SDKs for building"
 
-# Clear location
-"Clear the simulated location on the booted device"
+# Show build destinations
+"List all available destinations for iOS builds"
+
+# Run a tool via xcrun
+"Run swift command with version flag via xcrun"
 ```
 
 ## Error Handling
 
 The server includes comprehensive error handling:
 
-- **Command failures**: Returns detailed error messages from simctl
-- **Missing Xcode**: Detects when xcrun simctl is not available
+- **Command failures**: Returns detailed error messages from xcrun, xcodebuild, and xctrace
+- **Missing Xcode**: Detects when Xcode Command Line Tools are not available
+- **Invalid parameters**: Validates tool arguments and provides helpful error messages
+- **Tool availability**: Checks for required tools before execution
+
+## Troubleshooting
+
+### Common Issues
+
+1. **"xcrun: error: unable to find utility"**
+   - Ensure Xcode Command Line Tools are installed: `xcode-select --install`
+   - Verify Xcode is properly configured: `xcode-select -p`
+
+2. **"No developer directory found"**
+   - Install Xcode from the Mac App Store
+   - Accept Xcode license: `sudo xcodebuild -license accept`
+
+3. **Permission errors**
+   - Ensure the user has necessary permissions to access Xcode tools
+   - Try running with proper macOS development permissions
+
+4. **Tool not found errors**
+   - Verify the specific tool is available in your Xcode installation
+   - Some tools may require specific Xcode versions or additional components
+
+## Requirements
+
+- **macOS**: Required (Xcode development tools are macOS-only)
+- **Xcode**: Xcode Command Line Tools or full Xcode installation
+- **Python**: 3.13 or higher
+- **MCP Client**: Claude Desktop, VS Code with MCP extension, or any MCP-compatible client
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
 - **Invalid parameters**: Validates input parameters before execution
 - **File operations**: Handles temporary files for push notifications safely
 
